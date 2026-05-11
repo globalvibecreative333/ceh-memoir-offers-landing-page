@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start With One Memory — Creative Equity Hub</title>
+<meta name="description" content="Turn one memory, family story or loose piece of life material into a clean story note you can keep, expand, record or use with ChatGPT.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:        #f1e8d4;
+    --paper-light:  #f7f0dd;
+    --paper-warm:   #ebe1c7;
+    --paper-deep:   #e1d4b3;
+    --ink:          #1f1812;
+    --ink-soft:     #4a3c2e;
+    --ink-fade:     #8a7c66;
+    --rule:         #c9b993;
+    --rule-soft:    #d8cba8;
+    --oxblood:      #7a2a22;
+    --oxblood-deep: #5a1f1a;
+    --terracotta:   #b5552d;
+    --ochre:        #b08438;
+    --moss:         #5a6a4e;
+    --shadow:       0 1px 2px rgba(31,24,18,0.04), 0 8px 28px rgba(31,24,18,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 19px;
+    line-height: 1.6;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Paper grain — subtle, layered */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(31,24,18,0.045) 1px, transparent 0);
+    background-size: 3px 3px;
+    mix-blend-mode: multiply;
+    opacity: 0.55;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 99;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(176,132,56,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 40% at 50% 100%, rgba(122,42,34,0.06) 0%, transparent 60%);
+  }
+
+  ::selection { background: var(--oxblood); color: var(--paper-light); }
+
+  /* Header */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(241,232,212,0.78);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .nav-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 18px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .wordmark {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  @media (max-width: 520px) {
+    .wordmark { font-size: 13px; letter-spacing: 0.16em; }
+    .wordmark::before { width: 18px; }
+  }
+  .wordmark::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--oxblood);
+  }
+  .nav-links {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .nav-links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 200ms;
+  }
+  .nav-links a:hover { color: var(--oxblood); }
+  @media (max-width: 720px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .nav-inner { padding: 14px 22px; }
+  }
+  .nav-cta {
+    padding: 10px 20px;
+    background: var(--ink);
+    color: var(--paper-light) !important;
+    border-radius: 999px;
+    transition: background 200ms;
+  }
+  .nav-cta:hover { background: var(--oxblood); }
+
+  /* Container */
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 36px;
+  }
+  .narrow {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .narrower {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* Section scaffolding */
+  section { position: relative; z-index: 2; }
+  .section-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-variation-settings: "SOFT" 80;
+    font-size: 14px;
+    color: var(--oxblood);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .section-num::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--rule), transparent);
+    max-width: 200px;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .display {
+    font-family: 'Fraunces', serif;
+    font-weight: 350;
+    font-variation-settings: "SOFT" 50, "opsz" 144;
+    font-size: clamp(54px, 9vw, 128px);
+    line-height: 0.94;
+    letter-spacing: -0.035em;
+  }
+  .display em {
+    font-style: italic;
+    font-weight: 300;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+    color: var(--oxblood);
+  }
+
+  h2.section-head {
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    font-weight: 380;
+    font-variation-settings: "SOFT" 30, "opsz" 144;
+    letter-spacing: -0.02em;
+  }
+  h2.section-head em {
+    font-style: italic;
+    color: var(--oxblood);
+    font-weight: 300;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+  }
+
+  .lede {
+    font-family: 'Newsreader', serif;
+    font-size: clamp(20px, 2.1vw, 26px);
+    line-height: 1.45;
+    color: var(--ink-soft);
+    font-weight: 350;
+    letter-spacing: -0.005em;
+  }
+  .lede em { color: var(--oxblood); font-style: italic; }
+
+  p { margin-bottom: 1em; }
+  p:last-child { margin-bottom: 0; }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 17px 30px;
+    border-radius: 999px;
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: transform 220ms cubic-bezier(.2,.7,.3,1), background 220ms, color 220ms, box-shadow 220ms;
+    white-space: nowrap;
+  }
+  .btn::after {
+    content: '→';
+    font-family: 'Newsreader', serif;
+    font-size: 18px;
+    transition: transform 220ms;
+  }
+  .btn:hover::after { transform: translateX(4px); }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper-light);
+    box-shadow: var(--shadow);
+  }
+  .btn-primary:hover {
+    background: var(--oxblood);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+  .btn-secondary:hover {
+    background: var(--ink);
+    color: var(--paper-light);
+    transform: translateY(-1px);
+  }
+  .btn-oxblood {
+    background: var(--oxblood);
+    color: var(--paper-light);
+  }
+  .btn-oxblood:hover {
+    background: var(--oxblood-deep);
+    transform: translateY(-1px);
+  }
+
+  /* Ornament divider */
+  .ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 100px auto;
+    gap: 22px;
+    color: var(--rule);
+  }
+  .ornament::before,
+  .ornament::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--rule), transparent);
+    max-width: 200px;
+  }
+  .ornament svg { width: 26px; height: 26px; opacity: 0.7; }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 80px 0 130px;
+    position: relative;
+  }
+  .hero-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 36px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  @media (max-width: 980px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 50px; }
+  }
+  .hero-marker {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-variation-settings: "SOFT" 100;
+    font-size: 16px;
+    color: var(--oxblood);
+    letter-spacing: 0.12em;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .hero-marker::before {
+    content: '';
+    width: 36px;
+    height: 1px;
+    background: var(--oxblood);
+  }
+  .hero-sub {
+    margin-top: 36px;
+    font-size: clamp(20px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 620px;
+    font-weight: 350;
+  }
+  .hero-support {
+    margin-top: 22px;
+    font-style: italic;
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-variation-settings: "SOFT" 100;
+    color: var(--ink-fade);
+    font-size: 17px;
+    max-width: 620px;
+  }
+  .hero-buttons {
+    margin-top: 44px;
+  }
+
+  /* Hero side panel — archival card */
+  .hero-card {
+    position: relative;
+    background: var(--paper-light);
+    padding: 36px 32px 28px;
+    border: 1px solid var(--rule-soft);
+    box-shadow: var(--shadow);
+    transform: rotate(1.2deg);
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 110px;
+    height: 26px;
+    background: rgba(122, 42, 34, 0.22);
+    border-radius: 1px;
+    box-shadow: 0 2px 6px rgba(31,24,18,0.1);
+  }
+  .hero-card-label {
+    font-family: 'Fraunces', serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    color: var(--oxblood);
+    margin-bottom: 18px;
+  }
+  .hero-card-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-size: 30px;
+    line-height: 1.1;
+    margin-bottom: 22px;
+    color: var(--ink);
+  }
+  .hero-card-list {
+    list-style: none;
+    border-top: 1px dashed var(--rule);
+    padding-top: 16px;
+  }
+  .hero-card-list li {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    padding: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px dotted var(--rule-soft);
+    letter-spacing: 0.02em;
+  }
+  .hero-card-list li:last-child { border-bottom: none; }
+  .hero-card-list li span {
+    color: var(--ink-fade);
+    font-style: italic;
+    font-size: 13px;
+  }
+  .hero-card-stamp {
+    position: absolute;
+    bottom: -22px;
+    right: -22px;
+    background: var(--oxblood);
+    color: var(--paper-light);
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings: "SOFT" 100;
+    font-size: 15px;
+    line-height: 1.05;
+    transform: rotate(-12deg);
+    box-shadow: 0 6px 18px rgba(122,42,34,0.32);
+  }
+
+  /* ============ PROBLEM ============ */
+  .problem {
+    padding: 40px 0 80px;
+  }
+  .problem-head {
+    margin-bottom: 56px;
+  }
+  .problem-head h2 {
+    font-size: clamp(34px, 4.2vw, 56px);
+    line-height: 1.08;
+    font-weight: 380;
+    font-variation-settings: "SOFT" 30;
+    letter-spacing: -0.018em;
+    margin-bottom: 28px;
+  }
+  .problem-head h2 em {
+    font-style: italic;
+    color: var(--oxblood);
+    font-weight: 300;
+    font-variation-settings: "SOFT" 100;
+  }
+  .problem-head p {
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    font-weight: 380;
+  }
+  .problem-list {
+    list-style: none;
+    counter-reset: prob;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .problem-list li {
+    counter-increment: prob;
+    padding: 22px 0 22px 70px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    font-family: 'Newsreader', serif;
+    font-size: 20px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    font-weight: 380;
+  }
+  .problem-list li::before {
+    content: counter(prob, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 24px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-variation-settings: "SOFT" 100;
+    font-size: 16px;
+    color: var(--oxblood);
+    letter-spacing: 0.08em;
+  }
+  .problem-closer {
+    margin-top: 56px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 320;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height: 1.18;
+    color: var(--ink);
+    text-align: center;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .problem-closer .accent { color: var(--oxblood); }
+
+  /* ============ WHAT THIS IS ============ */
+  .what {
+    padding: 100px 0;
+    background:
+      linear-gradient(180deg, transparent 0%, var(--paper-warm) 12%, var(--paper-warm) 88%, transparent 100%);
+    position: relative;
+  }
+  .what-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .what-grid { grid-template-columns: 1fr; gap: 50px; }
+  }
+  .what-not {
+    background: var(--paper);
+    padding: 38px 34px;
+    border-left: 3px solid var(--oxblood);
+    box-shadow: var(--shadow);
+  }
+  .what-not-label {
+    font-family: 'Fraunces', serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    color: var(--oxblood);
+    margin-bottom: 22px;
+  }
+  .what-not ul {
+    list-style: none;
+  }
+  .what-not li {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    text-decoration: line-through;
+    text-decoration-color: var(--oxblood);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    opacity: 0.7;
+  }
+  .what-not li:last-child { border-bottom: none; }
+
+  .what-yes-label {
+    font-family: 'Fraunces', serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    color: var(--moss);
+    margin-bottom: 22px;
+  }
+  .what-yes h3 {
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height: 1.12;
+    font-weight: 380;
+    font-variation-settings: "SOFT" 30;
+    margin-bottom: 24px;
+    letter-spacing: -0.015em;
+  }
+  .what-yes h3 em {
+    font-style: italic;
+    color: var(--oxblood);
+    font-variation-settings: "SOFT" 100;
+  }
+  .what-yes p {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+  }
+  .what-yes .closer {
+    margin-top: 24px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1.35;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* Pull quote */
+  .pullquote {
+    text-align: center;
+    padding: 110px 0;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .pullquote-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-variation-settings: "SOFT" 100;
+    font-size: 90px;
+    line-height: 0.6;
+    color: var(--oxblood);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .pullquote blockquote {
+    font-family: 'Fraunces', serif;
+    font-weight: 320;
+    font-variation-settings: "SOFT" 50, "opsz" 144;
+    font-style: italic;
+    font-size: clamp(28px, 3.8vw, 46px);
+    line-height: 1.18;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+    padding: 0 24px;
+  }
+  .pullquote blockquote .line {
+    display: block;
+  }
+  .pullquote blockquote .em {
+    color: var(--oxblood);
+  }
+  .pullquote-attr {
+    margin-top: 32px;
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ink-fade);
+  }
+
+  /* ============ FREE TOOL ============ */
+  .free {
+    padding: 80px 0 100px;
+  }
+  .free-card {
+    background: var(--ink);
+    color: var(--paper-light);
+    border-radius: 4px;
+    padding: 70px 70px 64px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 18px 60px rgba(31,24,18,0.18);
+  }
+  .free-card::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(176,132,56,0.3) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .free-card::after {
+    content: '';
+    position: absolute;
+    bottom: -120px; left: -80px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(122,42,34,0.28) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  @media (max-width: 720px) { .free-card { padding: 44px 28px; } }
+
+  .free-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 60px;
+    position: relative;
+    z-index: 2;
+  }
+  @media (max-width: 880px) { .free-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+  .free-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Fraunces', serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--ochre);
+    margin-bottom: 22px;
+    font-weight: 500;
+  }
+  .free-tag::before {
+    content: '';
+    width: 22px;
+    height: 1px;
+    background: var(--ochre);
+  }
+  .free-card h2 {
+    font-size: clamp(34px, 4.6vw, 58px);
+    line-height: 1.05;
+    color: var(--paper-light);
+    font-weight: 380;
+    font-variation-settings: "SOFT" 30;
+    letter-spacing: -0.02em;
+    margin-bottom: 26px;
+  }
+  .free-card h2 em {
+    color: var(--ochre);
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-weight: 300;
+  }
+  .free-card p {
+    color: var(--paper-warm);
+    opacity: 0.85;
+    font-size: 19px;
+    line-height: 1.55;
+    margin-bottom: 24px;
+  }
+  .free-uselist {
+    list-style: none;
+    margin: 26px 0 36px;
+    color: var(--paper-warm);
+    opacity: 0.92;
+  }
+  .free-uselist li {
+    padding: 7px 0 7px 24px;
+    position: relative;
+    font-family: 'Newsreader', serif;
+    font-size: 17px;
+  }
+  .free-uselist li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--ochre);
+  }
+
+  .free-organize {
+    background: rgba(247,240,221,0.06);
+    border: 1px solid rgba(176,132,56,0.25);
+    padding: 36px 32px;
+    border-radius: 2px;
+  }
+  .free-organize-title {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-size: 22px;
+    color: var(--paper-light);
+    margin-bottom: 22px;
+    font-weight: 400;
+  }
+  .free-organize ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .free-organize li {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    color: var(--paper-warm);
+    padding: 11px 0;
+    border-bottom: 1px dotted rgba(247,240,221,0.18);
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .free-organize li::before {
+    content: counter(organize, decimal-leading-zero);
+    counter-increment: organize;
+    color: var(--ochre);
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+  .free-organize ul { counter-reset: organize; }
+  @media (max-width: 720px) {
+    .free-organize ul { grid-template-columns: 1fr; }
+  }
+
+  /* ============ STORY TOOLS ============ */
+  .tools {
+    padding: 60px 0 100px;
+  }
+  .tools-head {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+  .tools-head h2 {
+    font-size: clamp(34px, 4.4vw, 56px);
+    line-height: 1.08;
+    font-weight: 380;
+    font-variation-settings: "SOFT" 30;
+    letter-spacing: -0.018em;
+    margin-bottom: 14px;
+  }
+  .tools-head h2 em {
+    color: var(--oxblood);
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-weight: 300;
+  }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 28px;
+  }
+  @media (max-width: 980px) { .tools-grid { grid-template-columns: 1fr; } }
+
+  .tool-card {
+    background: var(--paper-light);
+    padding: 40px 34px 36px;
+    border: 1px solid var(--rule-soft);
+    box-shadow: var(--shadow);
+    position: relative;
+    transition: transform 280ms cubic-bezier(.2,.7,.3,1), box-shadow 280ms;
+    display: flex;
+    flex-direction: column;
+  }
+  .tool-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(31,24,18,0.04), 0 18px 44px rgba(31,24,18,0.1);
+  }
+  .tool-num {
+    position: absolute;
+    top: 28px;
+    right: 30px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-weight: 300;
+    font-size: 14px;
+    color: var(--rule);
+    letter-spacing: 0.1em;
+  }
+  .tool-tier {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Fraunces', serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 26px;
+    font-weight: 500;
+  }
+  .tier-free {
+    background: var(--paper-deep);
+    color: var(--moss);
+  }
+  .tier-starter {
+    background: rgba(176, 132, 56, 0.18);
+    color: var(--ochre);
+  }
+  .tier-paid {
+    background: rgba(122, 42, 34, 0.16);
+    color: var(--oxblood);
+  }
+  .tool-price {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+    font-size: 36px;
+    font-weight: 350;
+    line-height: 1;
+    color: var(--oxblood);
+    margin-bottom: 20px;
+    letter-spacing: -0.015em;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .tool-price.is-free { color: var(--moss); }
+  .tool-price .note {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 13px;
+    color: var(--ink-fade);
+    letter-spacing: 0.04em;
+    font-variation-settings: "SOFT" 100;
+  }
+  .tool-title {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    line-height: 1.08;
+    font-weight: 400;
+    font-variation-settings: "SOFT" 50;
+    letter-spacing: -0.015em;
+    margin-bottom: 16px;
+    color: var(--ink);
+  }
+  .tool-best {
+    font-family: 'Newsreader', serif;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+    flex-grow: 0;
+  }
+  .tool-includes-label, .tool-uses-label {
+    font-family: 'Fraunces', serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.26em;
+    color: var(--ink-fade);
+    margin-bottom: 12px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .tool-includes, .tool-uses {
+    list-style: none;
+    margin-bottom: 18px;
+  }
+  .tool-includes li, .tool-uses li {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    color: var(--ink-soft);
+    padding: 5px 0 5px 18px;
+    position: relative;
+  }
+  .tool-includes li::before, .tool-uses li::before {
+    content: '◦';
+    position: absolute;
+    left: 0;
+    color: var(--oxblood);
+  }
+  .tool-key {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-size: 18px;
+    line-height: 1.35;
+    color: var(--ink);
+    padding: 18px 0;
+    margin-top: 8px;
+    border-top: 1px dashed var(--rule);
+    border-bottom: 1px dashed var(--rule);
+    margin-bottom: 24px;
+  }
+  .tool-extra {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+  }
+  .tool-cta {
+    margin-top: auto;
+    padding-top: 24px;
+  }
+  .tool-cta .btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 15px;
+    padding: 14px 22px;
+  }
+
+  /* ============ CUSTOM OFFERS ============ */
+  .offers {
+    padding: 100px 0;
+    background: linear-gradient(180deg, transparent, rgba(31,24,18,0.04));
+  }
+  .offers-head {
+    text-align: center;
+    margin-bottom: 70px;
+  }
+  .offers-head h2 {
+    font-size: clamp(36px, 5vw, 62px);
+    line-height: 1.04;
+    font-weight: 380;
+    font-variation-settings: "SOFT" 30;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .offers-head h2 em {
+    color: var(--oxblood);
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-weight: 300;
+  }
+  .offers-intro {
+    max-width: 660px;
+    margin: 0 auto;
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .offers-intro em { color: var(--oxblood); font-style: italic; }
+
+  .offers-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .offer-card {
+    background: var(--paper-light);
+    border: 1px solid var(--rule);
+    padding: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 50px;
+    box-shadow: var(--shadow);
+    transition: transform 300ms cubic-bezier(.2,.7,.3,1), box-shadow 300ms;
+    position: relative;
+  }
+  .offer-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(31,24,18,0.06), 0 22px 50px rgba(31,24,18,0.12);
+  }
+  @media (max-width: 880px) {
+    .offer-card { grid-template-columns: 1fr; gap: 30px; padding: 36px 28px; }
+  }
+  .offer-left { border-right: 1px solid var(--rule-soft); padding-right: 50px; }
+  @media (max-width: 880px) { .offer-left { border-right: none; padding-right: 0; border-bottom: 1px solid var(--rule-soft); padding-bottom: 30px; } }
+  .offer-tag {
+    font-family: 'Fraunces', serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--oxblood);
+    margin-bottom: 20px;
+  }
+  .offer-title {
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    line-height: 1.1;
+    font-weight: 400;
+    font-variation-settings: "SOFT" 50;
+    letter-spacing: -0.015em;
+    margin-bottom: 18px;
+  }
+  .offer-price {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-size: 38px;
+    line-height: 1;
+    color: var(--oxblood);
+    margin-bottom: 28px;
+    font-weight: 350;
+  }
+  .offer-desc {
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+  }
+  .offer-cta .btn {
+    font-size: 15px;
+    padding: 14px 24px;
+  }
+  .offer-sublabel {
+    font-family: 'Fraunces', serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.26em;
+    color: var(--ink-fade);
+    margin-bottom: 12px;
+  }
+  .offer-list {
+    list-style: none;
+    margin-bottom: 24px;
+  }
+  .offer-list li {
+    font-family: 'Newsreader', serif;
+    font-size: 16px;
+    color: var(--ink-soft);
+    padding: 7px 0 7px 22px;
+    position: relative;
+    border-bottom: 1px dotted var(--rule-soft);
+  }
+  .offer-list li:last-child { border-bottom: none; }
+  .offer-list li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: var(--ochre);
+    font-size: 10px;
+    top: 11px;
+  }
+  .offer-receive li::before { content: '◆'; color: var(--oxblood); font-size: 9px; top: 12px; }
+
+  /* ============ WHY DIFFERENT ============ */
+  .why {
+    padding: 110px 0;
+  }
+  .why-head h2 {
+    font-size: clamp(38px, 5.5vw, 72px);
+    line-height: 1.02;
+    font-weight: 380;
+    font-variation-settings: "SOFT" 30;
+    letter-spacing: -0.025em;
+    margin-bottom: 50px;
+    text-align: center;
+  }
+  .why-head h2 em {
+    color: var(--oxblood);
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-weight: 300;
+  }
+  .why-statements {
+    max-width: 720px;
+    margin: 0 auto 60px;
+    text-align: center;
+  }
+  .why-statements p {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(22px, 2.6vw, 32px);
+    line-height: 1.25;
+    font-weight: 380;
+    font-variation-settings: "SOFT" 50;
+    color: var(--ink);
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+  }
+  .why-need {
+    background: var(--paper-warm);
+    padding: 50px 40px;
+    border-top: 2px solid var(--oxblood);
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .why-need-label {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-size: 22px;
+    margin-bottom: 28px;
+    text-align: center;
+    color: var(--oxblood);
+  }
+  .why-need ul {
+    list-style: none;
+  }
+  .why-need li {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    color: var(--ink);
+    padding: 14px 0 14px 38px;
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+    font-weight: 400;
+  }
+  .why-need li:last-child { border-bottom: none; }
+  .why-need li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 22px;
+    width: 26px;
+    height: 1px;
+    background: var(--oxblood);
+  }
+  .why-closer {
+    margin-top: 50px;
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+    font-size: clamp(24px, 3vw, 36px);
+    line-height: 1.3;
+    color: var(--ink);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .why-closer .last {
+    display: block;
+    margin-top: 8px;
+    color: var(--oxblood);
+    font-weight: 400;
+  }
+
+  /* ============ USE CASES ============ */
+  .uses {
+    padding: 100px 0;
+    background: var(--paper-warm);
+  }
+  .uses-head {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+  .uses-head h2 {
+    font-size: clamp(32px, 4.2vw, 52px);
+    line-height: 1.08;
+    font-weight: 380;
+    font-variation-settings: "SOFT" 30;
+    letter-spacing: -0.015em;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .uses-head h2 em {
+    color: var(--oxblood);
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-weight: 300;
+  }
+  .uses-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  @media (max-width: 760px) { .uses-grid { grid-template-columns: 1fr; } }
+  .use {
+    background: var(--paper);
+    padding: 40px 36px;
+    position: relative;
+  }
+  .use-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-weight: 300;
+    font-size: 13px;
+    color: var(--oxblood);
+    letter-spacing: 0.2em;
+    margin-bottom: 14px;
+  }
+  .use h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    line-height: 1.15;
+    font-weight: 400;
+    font-variation-settings: "SOFT" 50;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .use p {
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .use-full {
+    grid-column: 1 / -1;
+  }
+  @media (max-width: 760px) { .use-full { grid-column: auto; } }
+
+  /* ============ FAQ ============ */
+  .faq {
+    padding: 110px 0;
+  }
+  .faq-head {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+  .faq-head h2 {
+    font-size: clamp(36px, 5vw, 62px);
+    line-height: 1.04;
+    font-weight: 380;
+    font-variation-settings: "SOFT" 30;
+    letter-spacing: -0.02em;
+  }
+  .faq-head h2 em {
+    color: var(--oxblood);
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-weight: 300;
+  }
+  .faq-list {
+    max-width: 820px;
+    margin: 0 auto;
+    border-top: 1px solid var(--rule);
+  }
+  details {
+    border-bottom: 1px solid var(--rule);
+    padding: 26px 0;
+  }
+  summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    font-family: 'Fraunces', serif;
+    font-size: clamp(20px, 2.2vw, 26px);
+    line-height: 1.25;
+    font-weight: 400;
+    font-variation-settings: "SOFT" 30;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    transition: color 200ms;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before {
+    content: '+';
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    color: var(--oxblood);
+    font-size: 26px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 300ms cubic-bezier(.2,.7,.3,1);
+    transform-origin: center;
+    margin-top: 2px;
+  }
+  details[open] summary::before {
+    transform: rotate(45deg);
+  }
+  summary:hover { color: var(--oxblood); }
+  .faq-answer {
+    margin-top: 18px;
+    padding-left: 42px;
+    font-family: 'Newsreader', serif;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 680px;
+  }
+  details[open] .faq-answer {
+    animation: fadeIn 400ms ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============ FINAL CTA ============ */
+  .final {
+    padding: 140px 0 140px;
+    background: var(--ink);
+    color: var(--paper-light);
+    position: relative;
+    overflow: hidden;
+  }
+  .final::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(176,132,56,0.16) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 20% 0%, rgba(122,42,34,0.18) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .final-inner {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 36px;
+  }
+  .final-marker {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: var(--ochre);
+    margin-bottom: 36px;
+    text-transform: uppercase;
+  }
+  .final h2 {
+    font-family: 'Fraunces', serif;
+    color: var(--paper-light);
+    font-size: clamp(46px, 7vw, 100px);
+    line-height: 0.98;
+    font-weight: 350;
+    font-variation-settings: "SOFT" 50, "opsz" 144;
+    letter-spacing: -0.03em;
+    margin-bottom: 36px;
+  }
+  .final h2 em {
+    color: var(--ochre);
+    font-style: italic;
+    font-weight: 300;
+    font-variation-settings: "SOFT" 100;
+  }
+  .final-sub {
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--paper-warm);
+    opacity: 0.85;
+    margin-bottom: 50px;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .final-list {
+    list-style: none;
+    margin: 0 auto 56px;
+    max-width: 480px;
+    text-align: left;
+  }
+  .final-list li {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    color: var(--paper-light);
+    padding: 14px 0 14px 32px;
+    position: relative;
+    border-bottom: 1px solid rgba(247,240,221,0.15);
+    font-weight: 380;
+  }
+  .final-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 26px;
+    width: 20px;
+    height: 1px;
+    background: var(--ochre);
+  }
+  .final-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+  }
+  .final-buttons .btn-primary {
+    background: var(--ochre);
+    color: var(--ink);
+  }
+  .final-buttons .btn-primary:hover { background: var(--paper-light); }
+  .final-buttons .btn-secondary {
+    color: var(--paper-light);
+    border-color: rgba(247,240,221,0.3);
+  }
+  .final-buttons .btn-secondary:hover {
+    background: var(--paper-light);
+    color: var(--ink);
+    border-color: var(--paper-light);
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    background: var(--ink);
+    color: var(--ink-fade);
+    border-top: 1px solid rgba(247,240,221,0.1);
+    padding: 40px 0 50px;
+  }
+  .foot-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .foot-mark {
+    color: var(--paper-warm);
+    opacity: 0.7;
+  }
+  @media (max-width: 640px) {
+    .foot-inner { flex-direction: column; text-align: center; gap: 16px; }
+  }
+
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 800ms cubic-bezier(.2,.7,.3,1), transform 800ms cubic-bezier(.2,.7,.3,1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="wordmark">Creative Equity Hub</a>
+    <div class="nav-links">
+      <a href="#tools">Tools</a>
+      <a href="#offers">Custom</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://globalvibecreative333.github.io/memory-starter-map/" target="_blank" rel="noopener" class="nav-cta">Start Free</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-marker">A starting place for story</div>
+      <h1 class="display">Start<br>With <em>One</em><br>Memory</h1>
+      <p class="hero-sub">Turn one memory, family story or loose piece of life material into a clean story note you can keep, expand, record or use with ChatGPT.</p>
+      <p class="hero-support">No chapter one. No blank page. No subscription. Just a clean place to begin.</p>
+      <div class="hero-buttons btn-row">
+        <a href="https://globalvibecreative333.github.io/memory-starter-map/" target="_blank" rel="noopener" class="btn btn-primary">Use the Free Memory Starter Map</a>
+        <a href="#tools" class="btn btn-secondary">See the Story Tools</a>
+      </div>
+    </div>
+
+    <aside class="hero-card" aria-hidden="true">
+      <div class="hero-card-label">Story Note · No. 014</div>
+      <div class="hero-card-title">The kitchen table,<br>summer, 1978</div>
+      <ul class="hero-card-list">
+        <li>People <span>three</span></li>
+        <li>Place <span>grandma's house</span></li>
+        <li>Sense <span>citronella, peaches</span></li>
+        <li>Why it matters <span>noted</span></li>
+        <li>Open questions <span>two</span></li>
+      </ul>
+      <div class="hero-card-stamp">somewhere<br>to land</div>
+    </aside>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="ornament">
+    <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1">
+      <path d="M20 4 C 12 12, 12 18, 20 20 C 28 22, 28 28, 20 36 M 4 20 C 12 12, 18 12, 20 20 C 22 28, 28 28, 36 20"/>
+      <circle cx="20" cy="20" r="1.5" fill="currentColor"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ============ PROBLEM ============ -->
+<section class="problem">
+  <div class="wrap narrow">
+    <div class="section-num">I. The Beginning</div>
+    <div class="problem-head">
+      <h2>Most story projects do not start with <em>chapter one</em>.</h2>
+      <p>They start with one memory you keep coming back to.</p>
+    </div>
+
+    <ul class="problem-list">
+      <li>A parent's story you meant to ask about.</li>
+      <li>A grandparent's life that only exists in pieces.</li>
+      <li>A family history file full of names, dates and unanswered questions.</li>
+      <li>A photo, place, recipe, job, house or conversation that still has a pull on you.</li>
+    </ul>
+
+    <p class="problem-closer">The hard part is usually not <span class="accent">caring enough</span>.<br>It is knowing where to begin.</p>
+  </div>
+</section>
+
+<!-- ============ PULL QUOTE — "chapter one" ============ -->
+<section class="pullquote">
+  <span class="pullquote-mark">"</span>
+  <blockquote>
+    <span class="line">You do not have to start with chapter one.</span>
+    <span class="line em">Start with one room.</span>
+    <span class="line em">One person in that room.</span>
+    <span class="line em">One detail you still remember.</span>
+  </blockquote>
+</section>
+
+<!-- ============ WHAT THIS IS ============ -->
+<section class="what">
+  <div class="wrap narrow">
+    <div class="section-num">II. The Frame</div>
+
+    <div class="what-grid">
+      <div class="what-not">
+        <div class="what-not-label">What this is not</div>
+        <ul>
+          <li>Therapy</li>
+          <li>Ghostwriting</li>
+          <li>A year-long writing program</li>
+          <li>Polished AI mush</li>
+        </ul>
+      </div>
+
+      <div class="what-yes">
+        <div class="what-yes-label">What this is</div>
+        <h3>This is <em>structure</em> before writing.</h3>
+        <p>Just a starting structure for memories, family stories, interviews and genealogy context.</p>
+        <div class="closer">The goal is simple: give the story somewhere to land.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="ornament">
+  <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1">
+    <path d="M20 4 C 12 12, 12 18, 20 20 C 28 22, 28 28, 20 36 M 4 20 C 12 12, 18 12, 20 20 C 22 28, 28 28, 36 20"/>
+    <circle cx="20" cy="20" r="1.5" fill="currentColor"/>
+  </svg>
+</div></div>
+
+<!-- ============ FREE TOOL ============ -->
+<section class="free" id="free">
+  <div class="wrap">
+    <div class="free-card">
+      <div class="free-grid">
+        <div>
+          <div class="free-tag">Free · No Sign-Up</div>
+          <h2>Turn one memory into a <em>usable</em> story note.</h2>
+          <p>The Memory Starter Map helps you take one memory and organize it into a clean note in about 3–5 minutes.</p>
+
+          <div class="tool-includes-label" style="color: var(--ochre); border-top-color: rgba(176,132,56,0.3);">Use it for</div>
+          <ul class="free-uselist">
+            <li>A childhood memory</li>
+            <li>A parent or grandparent story</li>
+            <li>A family event</li>
+            <li>A place you remember clearly</li>
+            <li>A story you keep meaning to write down</li>
+            <li>A genealogy detail that needs more human context</li>
+          </ul>
+
+          <a href="https://globalvibecreative333.github.io/memory-starter-map/" target="_blank" rel="noopener" class="btn btn-primary" style="background: var(--ochre); color: var(--ink);">Start the Free Memory Starter Map</a>
+        </div>
+
+        <div class="free-organize">
+          <div class="free-organize-title">What it gives you — you will organize:</div>
+          <ul>
+            <li>Memory title</li>
+            <li>People involved</li>
+            <li>Place</li>
+            <li>Time period</li>
+            <li>Sensory detail</li>
+            <li>Why it still matters</li>
+            <li>Open questions</li>
+            <li>One ChatGPT follow-up prompt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PULL QUOTE — "slippery" ============ -->
+<section class="pullquote">
+  <span class="pullquote-mark">"</span>
+  <blockquote>
+    <span class="line">The story gets <span class="em">slippery</span>.</span>
+    <span class="line">Some memories do not disappear all at once.</span>
+    <span class="line">They get slippery first.</span>
+  </blockquote>
+  <div class="pullquote-attr">— a note on why we start now</div>
+</section>
+
+<!-- ============ STORY TOOLS ============ -->
+<section class="tools" id="tools">
+  <div class="wrap">
+    <div class="section-num" style="justify-content: center;">III. The Tools</div>
+    <div class="tools-head">
+      <h2>Choose the tool that <em>matches where you are</em>.</h2>
+    </div>
+
+    <div class="tools-grid">
+
+      <article class="tool-card">
+        <div class="tool-num">01</div>
+        <div class="tool-tier tier-free">Free app · Lead magnet</div>
+        <div class="tool-price is-free">Free <span class="note">no sign-up</span></div>
+        <h3 class="tool-title">Memory Starter Map</h3>
+        <p class="tool-best">Best when you have one memory, one family story or one loose piece of life material and want to turn it into a clean story note.</p>
+        <div class="tool-cta"><a href="https://globalvibecreative333.github.io/memory-starter-map/" target="_blank" rel="noopener" class="btn btn-secondary">Use the Free Tool</a></div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-num">02</div>
+        <div class="tool-tier tier-starter">Starter kit · App bundle</div>
+        <div class="tool-price">$19 <span class="note">one-time</span></div>
+        <h3 class="tool-title">Family Story Starter Kit</h3>
+        <p class="tool-best">Best when you want to organize more than one piece of family story material.</p>
+
+        <div class="tool-includes-label">Includes</div>
+        <ul class="tool-includes">
+          <li>Memory Starter Map</li>
+          <li>Interview Question Builder</li>
+          <li>Person-Behind-the-Records Map</li>
+        </ul>
+
+        <p class="tool-extra">Use it when you want to start gathering family memories, build better interview questions or add context around genealogy records without turning the whole thing into a giant project.</p>
+
+        <div class="tool-cta"><a href="https://buy.stripe.com/aFabJ1fZV6of7FM5vKfbq07" target="_blank" rel="noopener" class="btn btn-oxblood">Get the Starter Kit</a></div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tool-num">03</div>
+        <div class="tool-tier tier-paid">Paid app</div>
+        <div class="tool-price">$37 <span class="note">one-time</span></div>
+        <h3 class="tool-title">Family Story Interview Builder</h3>
+        <p class="tool-best">Best when you want to interview a parent, grandparent, elder relative, family member or yourself using ChatGPT Voice Mode.</p>
+
+        <p class="tool-extra">This tool helps you create a custom interview prompt so the conversation has a path from the first question.</p>
+
+        <div class="tool-uses-label">Use it for</div>
+        <ul class="tool-uses">
+          <li>Parent or grandparent interviews</li>
+          <li>Family story capture</li>
+          <li>Personal life story interviews</li>
+          <li>Genealogy context</li>
+          <li>Creative life stories</li>
+          <li>Work and life experience</li>
+        </ul>
+
+        <p class="tool-key">A real interview path, not just a list of questions.</p>
+
+        <div class="tool-cta"><a href="https://buy.stripe.com/7sYeVddRN8wn8JQaQ4fbq08" target="_blank" rel="noopener" class="btn btn-oxblood">Build a Story Interview Prompt</a></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CUSTOM OFFERS ============ -->
+<section class="offers" id="offers">
+  <div class="wrap">
+    <div class="section-num" style="justify-content: center;">IV. Custom Work</div>
+    <div class="offers-head">
+      <h2>Want the story structure <em>built for you?</em></h2>
+      <p class="offers-intro">The apps help you begin. The custom offers give you a clearer map when the material matters and you do not want to sort through it alone.</p>
+      <p class="offers-intro" style="margin-top: 18px;">Send the memory, notes, family story material, interview goal or genealogy context. You get back a structured starting point you can write from, record from, share with family or use with ChatGPT.</p>
+    </div>
+
+    <div class="offers-grid">
+
+      <article class="offer-card">
+        <div class="offer-left">
+          <div class="offer-tag">Custom Offer · No. 01</div>
+          <h3 class="offer-title">Memoir Starter Map</h3>
+          <div class="offer-price">$197</div>
+          <p class="offer-desc">For people with scattered memories, family stories or life material who need a clear place to begin.</p>
+          <p class="offer-desc">You send the raw material. I turn it into a written starter map with people, places, timeline notes, starting questions, what to write or record next and a ChatGPT prompt for continuing.</p>
+          <div class="offer-cta"><a href="https://buy.stripe.com/eVq7sL7tpcMD3pwcYcfbq09" target="_blank" rel="noopener" class="btn btn-oxblood">Get a Custom Starter Map</a></div>
+        </div>
+        <div class="offer-right">
+          <div class="offer-sublabel">Best for</div>
+          <ul class="offer-list">
+            <li>One memory</li>
+            <li>One person</li>
+            <li>One life period</li>
+            <li>One family story thread</li>
+            <li>One ancestor or genealogy context piece</li>
+            <li>One story you keep meaning to start</li>
+          </ul>
+          <div class="offer-sublabel">You receive</div>
+          <ul class="offer-list offer-receive">
+            <li>Written story map</li>
+            <li>People, place and timeline notes</li>
+            <li>Starting questions</li>
+            <li>Open questions</li>
+            <li>Suggested next steps</li>
+            <li>ChatGPT prompt for continuing</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="offer-card">
+        <div class="offer-left">
+          <div class="offer-tag">Custom Offer · No. 02</div>
+          <h3 class="offer-title">Memoir Interview Setup</h3>
+          <div class="offer-price">$397</div>
+          <p class="offer-desc">For people who want to interview a parent, grandparent, elder relative, family member or themselves but do not know what to ask first.</p>
+          <p class="offer-desc">This is for the moment when "tell me everything" is too broad and a random list of questions is not enough.</p>
+          <p class="offer-desc">You get a custom interview path built around the person, the story focus and what you want to preserve.</p>
+          <div class="offer-cta"><a href="https://buy.stripe.com/cNi9AT3d9bIzgci2jyfbq0a" target="_blank" rel="noopener" class="btn btn-oxblood">Set Up an Interview Path</a></div>
+        </div>
+        <div class="offer-right">
+          <div class="offer-sublabel">Best for</div>
+          <ul class="offer-list">
+            <li>Parent interviews</li>
+            <li>Grandparent interviews</li>
+            <li>Elder relative interviews</li>
+            <li>Family history conversations</li>
+            <li>Personal life story interviews</li>
+            <li>ChatGPT Voice Mode interview setup</li>
+          </ul>
+          <div class="offer-sublabel">You receive</div>
+          <ul class="offer-list offer-receive">
+            <li>Custom question map</li>
+            <li>Interview flow</li>
+            <li>Follow-up prompts</li>
+            <li>Story lanes to move through</li>
+            <li>Recording or ChatGPT Voice Mode workflow</li>
+            <li>Simple next steps for saving and organizing the interview</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="offer-card">
+        <div class="offer-left">
+          <div class="offer-tag">Custom Offer · No. 03</div>
+          <h3 class="offer-title">Memoir Prep Package</h3>
+          <div class="offer-price">$950</div>
+          <p class="offer-desc">For larger story piles, family history material, recordings, notes, genealogy research, photos or multiple story threads that need deeper organization.</p>
+          <p class="offer-desc">This is for people who already have material but do not yet have a clear structure.</p>
+          <div class="offer-cta"><a href="https://buy.stripe.com/bJeaEXbJFfYP4tAe2gfbq0b" target="_blank" rel="noopener" class="btn btn-oxblood">Organize the Bigger Story Pile</a></div>
+        </div>
+        <div class="offer-right">
+          <div class="offer-sublabel">Best for</div>
+          <ul class="offer-list">
+            <li>Memoir prep</li>
+            <li>Family history organization</li>
+            <li>Parent or grandparent story projects</li>
+            <li>Genealogy-to-story organization</li>
+            <li>Story material that may eventually go to a writer, editor or ghostwriter</li>
+            <li>Family legacy packets without the "legacy fog"</li>
+          </ul>
+          <div class="offer-sublabel">You receive</div>
+          <ul class="offer-list offer-receive">
+            <li>Organized story themes</li>
+            <li>Timeline sections</li>
+            <li>People and place notes</li>
+            <li>Family story threads</li>
+            <li>Open questions</li>
+            <li>Interview recommendations</li>
+            <li>Possible chapter or section paths</li>
+            <li>Prep packet for writing, recording, sharing or handing off later</li>
+          </ul>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ PULL QUOTE — "the pile" ============ -->
+<section class="pullquote">
+  <span class="pullquote-mark">"</span>
+  <blockquote>
+    <span class="line">Most people do not have a writing problem at first.</span>
+    <span class="line em">They have a pile problem.</span>
+  </blockquote>
+  <div class="pullquote-attr">— memories, photos, names, places, half-stories</div>
+</section>
+
+<!-- ============ WHY DIFFERENT ============ -->
+<section class="why">
+  <div class="wrap narrow">
+    <div class="section-num" style="justify-content: center;">V. Why This Is Different</div>
+    <div class="why-head">
+      <h2>You do not need to <em>write the whole thing</em> yet.</h2>
+    </div>
+
+    <div class="why-statements">
+      <p>You do not need the perfect opening line.</p>
+      <p>You do not need to know whether this is a memoir, family history, interview project or something you are only beginning to understand.</p>
+      <p style="color: var(--oxblood); font-style: italic;">You need one clean starting point.</p>
+    </div>
+
+    <div class="why-need">
+      <div class="why-need-label">That might be —</div>
+      <ul>
+        <li>One memory turned into a story note</li>
+        <li>One parent interview with a real path</li>
+        <li>One ancestor profile with more context than dates</li>
+        <li>One family story organized before it slips</li>
+        <li>One pile of notes turned into something usable</li>
+      </ul>
+    </div>
+
+    <p class="why-closer">
+      The story does not need to become a book today.
+      <span class="last">It needs somewhere to land.</span>
+    </p>
+  </div>
+</section>
+
+<!-- ============ USE CASES ============ -->
+<section class="uses">
+  <div class="wrap">
+    <div class="section-num" style="justify-content: center;">VI. When to Use This</div>
+    <div class="uses-head">
+      <h2>Use this for the stories that <em>keep tapping you on the shoulder</em>.</h2>
+    </div>
+
+    <div class="uses-grid">
+
+      <div class="use">
+        <div class="use-num">i.</div>
+        <h3>Parent or grandparent interviews</h3>
+        <p>When you know there are stories to capture but do not know what to ask first.</p>
+      </div>
+
+      <div class="use">
+        <div class="use-num">ii.</div>
+        <h3>Family history and genealogy</h3>
+        <p>When you have names, dates, records and places but want the person behind the records to feel more real.</p>
+      </div>
+
+      <div class="use">
+        <div class="use-num">iii.</div>
+        <h3>Personal memoir notes</h3>
+        <p>When you want to start telling your own story but "write chapter one" feels like too much.</p>
+      </div>
+
+      <div class="use">
+        <div class="use-num">iv.</div>
+        <h3>Family story projects</h3>
+        <p>When you want to preserve memories, stories, photos, places and details before they scatter.</p>
+      </div>
+
+      <div class="use use-full">
+        <div class="use-num">v.</div>
+        <h3>ChatGPT Voice Mode interviews</h3>
+        <p>When you want AI to help guide the conversation without flattening the voice or turning the story into generic filler.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="section-num" style="justify-content: center;">VII. Questions</div>
+    <div class="faq-head">
+      <h2><em>Common</em> questions.</h2>
+    </div>
+
+    <div class="faq-list">
+
+      <details>
+        <summary>Is this ghostwriting?</summary>
+        <div class="faq-answer">No. This is not ghostwriting. These tools and custom offers help organize memories, interviews and family story material so you have a clear place to begin.</div>
+      </details>
+
+      <details>
+        <summary>Is this therapy or life coaching?</summary>
+        <div class="faq-answer">No. This is practical story organization.</div>
+      </details>
+
+      <details>
+        <summary>Do I need to be writing a memoir?</summary>
+        <div class="faq-answer">No. You can use this for memoir notes, family stories, parent or grandparent interviews, genealogy context or personal story capture.</div>
+      </details>
+
+      <details>
+        <summary>Can I use this with ChatGPT?</summary>
+        <div class="faq-answer">Yes. Some tools are designed specifically to help you use ChatGPT or ChatGPT Voice Mode with clearer prompts.</div>
+      </details>
+
+      <details>
+        <summary>What if I only have one memory?</summary>
+        <div class="faq-answer">That is enough. One memory is often the best place to start.</div>
+      </details>
+
+      <details>
+        <summary>What if I have genealogy records but no full story?</summary>
+        <div class="faq-answer">Use the Person-Behind-the-Records Map inside the Family Story Starter Kit or choose a custom starter map if you want help turning records, places and open questions into a more human story structure.</div>
+      </details>
+
+      <details>
+        <summary>Will this rewrite my story?</summary>
+        <div class="faq-answer">No. The goal is not to polish your life into generic AI language. The goal is to give your memory, interview or family story a structure you can actually use.</div>
+      </details>
+
+      <details>
+        <summary>Do I have to subscribe to anything?</summary>
+        <div class="faq-answer">No. The custom offers are one-time deliverables. Yours to keep. No subscription. No book obligation.</div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final">
+  <div class="final-inner">
+    <div class="final-marker">VIII. Begin</div>
+    <h2>Start small.<br><em>Keep the story moving.</em></h2>
+    <p class="final-sub">You do not need to organize the whole life today.</p>
+
+    <ul class="final-list">
+      <li>Start with one memory.</li>
+      <li>One person.</li>
+      <li>One interview.</li>
+      <li>One family story thread.</li>
+    </ul>
+
+    <p class="final-sub" style="font-style: italic; font-family: 'Fraunces', serif; font-variation-settings: 'SOFT' 100; color: var(--ochre); opacity: 1; margin-bottom: 56px;">Give it a place to land.</p>
+
+    <div class="final-buttons">
+      <a href="https://globalvibecreative333.github.io/memory-starter-map/" target="_blank" rel="noopener" class="btn btn-primary">Use the Free Memory Starter Map</a>
+      <a href="https://buy.stripe.com/aFabJ1fZV6of7FM5vKfbq07" target="_blank" rel="noopener" class="btn btn-secondary">Get the Family Story Starter Kit</a>
+      <a href="https://buy.stripe.com/7sYeVddRN8wn8JQaQ4fbq08" target="_blank" rel="noopener" class="btn btn-secondary">Build a Story Interview Prompt</a>
+      <a href="https://buy.stripe.com/eVq7sL7tpcMD3pwcYcfbq09" target="_blank" rel="noopener" class="btn btn-secondary">Get a Custom Starter Map</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-mark">Creative Equity Hub</div>
+    <div>One memory at a time</div>
+    <div>© 2026</div>
+  </div>
+</footer>
+
+<script>
+  // Reveal-on-scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('section > .wrap, .hero-inner, .free-card, .pullquote, .final-inner').forEach(el => {
+    el.classList.add('reveal');
+    io.observe(el);
+  });
+
+  // Close other FAQ items when opening one (accordion behavior)
+  document.querySelectorAll('.faq-list details').forEach(d => {
+    d.addEventListener('toggle', () => {
+      if (d.open) {
+        document.querySelectorAll('.faq-list details').forEach(o => {
+          if (o !== d) o.open = false;
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
